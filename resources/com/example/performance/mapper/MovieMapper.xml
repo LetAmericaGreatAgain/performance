@@ -1,0 +1,717 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.example.performance.mapper.MovieMapper">
+    <resultMap type="com.example.performance.domain.Movie" id="MovieResult">
+        <id property="title" column="title" />
+        <id property="year" column="year" />
+        <id property="genre" column="genre" />
+        <result property="duration" column="duration" />
+        <result property="description" column="description" />
+        <result property="investment" column="investment" />
+        <result property="releaseDate" column="release_date" />
+        <result property="companyNo" column="company_no" />
+        <association property="director" javaType="com.example.performance.domain.Director">
+            <id property="firstName" column="first_name_2_2_1" />
+            <id property="lastName" column="last_name_2_2_2" />
+            <result property="age" column="age_2_2_3" />
+            <result property="gender" column="gender_2_2_4" />
+            <result property="email" column="email_2_2_5" />
+            <result property="birthDate" column="birth_date_2_2_6" />
+            <result property="companyNo" column="company_no_2_2_7" />
+            <result property="movieTitle" column="movie_title_2_2_8" />
+            <result property="movieYear" column="movie_year_2_2_9" />
+            <result property="movieGenre" column="movie_genre_2_2_10" />
+        </association>
+        <collection property="actorList" javaType="java.util.List" ofType="com.example.performance.domain.Actor">
+            <id property="firstName" column="first_name_3_2_1" />
+            <id property="lastName" column="last_name_3_2_2" />
+            <result property="age" column="age_3_2_3" />
+            <result property="gender" column="gender_3_2_4" />
+            <result property="companyNo" column="company_no_3_2_5" />
+            <result property="email" column="email_3_2_6" />
+            <result property="birthDate" column="birth_date_3_2_7" />
+            <result property="debutTime" column="debut_time_3_2_8" />
+            <result property="movieTitle" column="movie_title_3_2_9" />
+            <result property="movieYear" column="movie_year_3_2_10" />
+            <result property="movieGenre" column="movie_genre_3_2_11" />
+        </collection>
+    </resultMap>
+
+    <sql id="selectMovieVo">
+        select
+        <trim prefix="" suffix="" suffixOverrides=",">
+            movie.title,
+            movie.year,
+            movie.genre,
+            movie.duration,
+            movie.description,
+            movie.investment,
+            movie.release_date,
+            movie.company_no,
+            director_2.first_name AS first_name_2_2_1,
+            director_2.last_name AS last_name_2_2_2,
+            director_2.age AS age_2_2_3,
+            director_2.gender AS gender_2_2_4,
+            director_2.email AS email_2_2_5,
+            director_2.birth_date AS birth_date_2_2_6,
+            director_2.company_no AS company_no_2_2_7,
+            director_2.movie_title AS movie_title_2_2_8,
+            director_2.movie_year AS movie_year_2_2_9,
+            director_2.movie_genre AS movie_genre_2_2_10,
+            actor_3.first_name AS first_name_3_2_1,
+            actor_3.last_name AS last_name_3_2_2,
+            actor_3.age AS age_3_2_3,
+            actor_3.gender AS gender_3_2_4,
+            actor_3.company_no AS company_no_3_2_5,
+            actor_3.email AS email_3_2_6,
+            actor_3.birth_date AS birth_date_3_2_7,
+            actor_3.debut_time AS debut_time_3_2_8,
+            actor_3.movie_title AS movie_title_3_2_9,
+            actor_3.movie_year AS movie_year_3_2_10,
+            actor_3.movie_genre AS movie_genre_3_2_11,
+        </trim>
+        from movie 
+        LEFT JOIN director AS director_2 on movie.title = director_2.movie_title AND movie.year = director_2.movie_year AND movie.genre = director_2.movie_genre
+        LEFT JOIN actor AS actor_3 on movie.title = actor_3.movie_title AND movie.year = actor_3.movie_year AND movie.genre = actor_3.movie_genre
+    </sql>
+
+
+    <select id="selectMovieByTitleAndYearAndGenre" parameterType="com.example.performance.domain.Movie" resultMap="MovieResult">
+        <include refid="selectMovieVo"/>
+        where movie.title = #{title} and movie.year = #{year} and movie.genre = #{genre}
+    </select>
+
+    <select id="selectMovieList" parameterType="com.example.performance.domain.Movie" resultMap="MovieResult">
+        <include refid="selectMovieVo"/>
+        <where>
+            true
+            <if test="title != null and title != ''">
+                and movie.title = #{title}
+            </if>
+            <if test="year != null ">
+                and movie.year = #{year}
+            </if>
+            <if test="genre != null and genre != ''">
+                and movie.genre = #{genre}
+            </if>
+            <if test="duration != null ">
+                and movie.duration = #{duration}
+            </if>
+            <if test="description != null and description != ''">
+                and movie.description = #{description}
+            </if>
+            <if test="investment != null ">
+                and movie.investment = #{investment}
+            </if>
+            <if test="releaseDate != null ">
+                and movie.release_date = #{releaseDate}
+            </if>
+            <if test="companyNo != null and companyNo != ''">
+                and movie.company_no = #{companyNo}
+            </if>
+        </where>
+    </select>
+
+    <select id="movieFixedColumnInQuery" resultMap="MovieResult">
+        <include refid="selectMovieVo"/>
+        where
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+                <if test="list[0].title != null and list[0].title != ''">
+                    movie.title,
+                </if>
+
+                <if test="list[0].year != null ">
+                    movie.year,
+                </if>
+
+                <if test="list[0].genre != null and list[0].genre != ''">
+                    movie.genre,
+                </if>
+
+
+                <if test="list[0].duration != null ">
+                    movie.duration,
+                </if>
+
+                <if test="list[0].description != null and list[0].description != ''">
+                    movie.description,
+                </if>
+
+                <if test="list[0].investment != null ">
+                    movie.investment,
+                </if>
+
+                <if test="list[0].releaseDate != null ">
+                    movie.release_date,
+                </if>
+
+
+                <if test="list[0].companyNo != null and list[0].companyNo != ''">
+                    movie.company_no,
+                </if>
+        </trim>
+        in
+        <foreach item="item" index="i" collection="list" open="(" separator=", " close=")">
+            <trim prefix="(" suffix=")" suffixOverrides=",">
+                <if test="list[0].title != null and list[0].title != ''">
+                    #{item.title},
+                </if>
+                <if test="list[0].year != null ">
+                    #{item.year},
+                </if>
+                <if test="list[0].genre != null and list[0].genre != ''">
+                    #{item.genre},
+                </if>
+                <if test="list[0].duration != null ">
+                    #{item.duration},
+                </if>
+                <if test="list[0].description != null and list[0].description != ''">
+                    #{item.description},
+                </if>
+                <if test="list[0].investment != null ">
+                    #{item.investment},
+                </if>
+                <if test="list[0].releaseDate != null ">
+                    #{item.releaseDate},
+                </if>
+                <if test="list[0].companyNo != null and list[0].companyNo != ''">
+                    #{item.companyNo},
+                </if>
+            </trim>
+        </foreach>
+
+    </select>
+
+
+    <select id="movieMultiColumnOrQuery" resultMap="MovieResult">
+        <include refid="selectMovieVo"/>
+        where
+        <foreach item="item" index="i" collection="list" open="" separator=" or " close="">
+            <trim prefix="(" suffix=")" suffixOverrides=",">
+                <if test="item.title != null and item.title != ''">
+                    movie.title,
+                </if>
+                <if test="item.year != null ">
+                    movie.year,
+                </if>
+                <if test="item.genre != null and item.genre != ''">
+                    movie.genre,
+                </if>
+                <if test="item.duration != null ">
+                    movie.duration,
+                </if>
+                <if test="item.description != null and item.description != ''">
+                    movie.description,
+                </if>
+                <if test="item.investment != null ">
+                    movie.investment,
+                </if>
+                <if test="item.releaseDate != null ">
+                    movie.release_date,
+                </if>
+                <if test="item.companyNo != null and item.companyNo != ''">
+                    movie.company_no,
+                </if>
+            </trim>
+            =
+            <trim prefix="(" suffix=")" suffixOverrides=",">
+                <if test="item.title != null and item.title != ''">
+                    #{item.title},
+                </if>
+                <if test="item.year != null ">
+                    #{item.year},
+                </if>
+                <if test="item.genre != null and item.genre != ''">
+                    #{item.genre},
+                </if>
+                <if test="item.duration != null ">
+                    #{item.duration},
+                </if>
+                <if test="item.description != null and item.description != ''">
+                    #{item.description},
+                </if>
+                <if test="item.investment != null ">
+                    #{item.investment},
+                </if>
+                <if test="item.releaseDate != null ">
+                    #{item.releaseDate},
+                </if>
+                <if test="item.companyNo != null and item.companyNo != ''">
+                    #{item.companyNo},
+                </if>
+            </trim>
+        </foreach>
+    </select>
+
+    <select id="movieMultiColumnInQuery" resultMap="MovieResult">
+        <include refid="selectMovieVo"/>
+        where
+        <foreach item="item" index="i" collection="list" open="" separator=" or " close="">
+            <trim prefix="(" suffix=")" suffixOverrides=",">
+                <if test="item.title != null and item.title != ''">
+                    movie.title,
+                </if>
+                <if test="item.year != null ">
+                    movie.year,
+                </if>
+                <if test="item.genre != null and item.genre != ''">
+                    movie.genre,
+                </if>
+                <if test="item.duration != null ">
+                    movie.duration,
+                </if>
+                <if test="item.description != null and item.description != ''">
+                    movie.description,
+                </if>
+                <if test="item.investment != null ">
+                    movie.investment,
+                </if>
+                <if test="item.releaseDate != null ">
+                    movie.release_date,
+                </if>
+                <if test="item.companyNo != null and item.companyNo != ''">
+                    movie.company_no,
+                </if>
+            </trim>
+            in
+            <trim prefix="((" suffix="))" suffixOverrides=",">
+                <if test="item.title != null and item.title != ''">
+                    #{item.title},
+                </if>
+                <if test="item.year != null ">
+                    #{item.year},
+                </if>
+                <if test="item.genre != null and item.genre != ''">
+                    #{item.genre},
+                </if>
+                <if test="item.duration != null ">
+                    #{item.duration},
+                </if>
+                <if test="item.description != null and item.description != ''">
+                    #{item.description},
+                </if>
+                <if test="item.investment != null ">
+                    #{item.investment},
+                </if>
+                <if test="item.releaseDate != null ">
+                    #{item.releaseDate},
+                </if>
+                <if test="item.companyNo != null and item.companyNo != ''">
+                    #{item.companyNo},
+                </if>
+            </trim>
+        </foreach>
+
+    </select>
+
+    <select id="movieMultiColumnUnionQuery" resultMap="MovieResult">
+        <foreach item="item" index="i" collection="list" open="" separator=" union " close="">
+            <trim prefix="(" suffix=")" suffixOverrides="">
+                <include refid="selectMovieVo"/>
+                where
+                <trim prefix="(" suffix=")" suffixOverrides=",">
+                    <if test="item.title != null and item.title != ''">
+                        movie.title,
+                    </if>
+                    <if test="item.year != null ">
+                        movie.year,
+                    </if>
+                    <if test="item.genre != null and item.genre != ''">
+                        movie.genre,
+                    </if>
+                    <if test="item.duration != null ">
+                        movie.duration,
+                    </if>
+                    <if test="item.description != null and item.description != ''">
+                        movie.description,
+                    </if>
+                    <if test="item.investment != null ">
+                        movie.investment,
+                    </if>
+                    <if test="item.releaseDate != null ">
+                        movie.release_date,
+                    </if>
+                    <if test="item.companyNo != null and item.companyNo != ''">
+                        movie.company_no,
+                    </if>
+                </trim>
+                =
+                <trim prefix="(" suffix=")" suffixOverrides=",">
+                    <if test="item.title != null and item.title != ''">
+                        #{item.title},
+                    </if>
+                    <if test="item.year != null ">
+                        #{item.year},
+                    </if>
+                    <if test="item.genre != null and item.genre != ''">
+                        #{item.genre},
+                    </if>
+                    <if test="item.duration != null ">
+                        #{item.duration},
+                    </if>
+                    <if test="item.description != null and item.description != ''">
+                        #{item.description},
+                    </if>
+                    <if test="item.investment != null ">
+                        #{item.investment},
+                    </if>
+                    <if test="item.releaseDate != null ">
+                        #{item.releaseDate},
+                    </if>
+                    <if test="item.companyNo != null and item.companyNo != ''">
+                        #{item.companyNo},
+                    </if>
+                </trim>
+            </trim>
+        </foreach>
+    </select>
+
+    <select id="movieMultiColumnUnionAllQuery" resultMap="MovieResult">
+        <foreach item="item" index="i" collection="list" open="(" separator=" union all " close=")">
+            <trim prefix="(" suffix=")" suffixOverrides="">
+                <include refid="selectMovieVo"/>
+                where
+                <trim prefix="(" suffix=")" suffixOverrides=",">
+                    <if test="item.title != null and item.title != ''">
+                        movie.title,
+                    </if>
+                    <if test="item.year != null ">
+                        movie.year,
+                    </if>
+                    <if test="item.genre != null and item.genre != ''">
+                        movie.genre,
+                    </if>
+                    <if test="item.duration != null ">
+                        movie.duration,
+                    </if>
+                    <if test="item.description != null and item.description != ''">
+                        movie.description,
+                    </if>
+                    <if test="item.investment != null ">
+                        movie.investment,
+                    </if>
+                    <if test="item.releaseDate != null ">
+                        movie.release_date,
+                    </if>
+                    <if test="item.companyNo != null and item.companyNo != ''">
+                        movie.company_no,
+                    </if>
+                </trim>
+                =
+                <trim prefix="(" suffix=")" suffixOverrides=",">
+                    <if test="item.title != null and item.title != ''">
+                        #{item.title},
+                    </if>
+                    <if test="item.year != null ">
+                        #{item.year},
+                    </if>
+                    <if test="item.genre != null and item.genre != ''">
+                        #{item.genre},
+                    </if>
+                    <if test="item.duration != null ">
+                        #{item.duration},
+                    </if>
+                    <if test="item.description != null and item.description != ''">
+                        #{item.description},
+                    </if>
+                    <if test="item.investment != null ">
+                        #{item.investment},
+                    </if>
+                    <if test="item.releaseDate != null ">
+                        #{item.releaseDate},
+                    </if>
+                    <if test="item.companyNo != null and item.companyNo != ''">
+                        #{item.companyNo},
+                    </if>
+                </trim>
+            </trim>
+        </foreach>
+    </select>
+
+    <insert id="insertMovie" parameterType="com.example.performance.domain.Movie">
+        insert into movie
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="title != null and title != ''">
+                title,
+            </if>
+            <if test="year != null ">
+                year,
+            </if>
+            <if test="genre != null and genre != ''">
+                genre,
+            </if>
+            <if test="duration != null ">
+                duration,
+            </if>
+            <if test="description != null and description != ''">
+                description,
+            </if>
+            <if test="investment != null ">
+                investment,
+            </if>
+            <if test="releaseDate != null ">
+                release_date,
+            </if>
+            <if test="companyNo != null and companyNo != ''">
+                company_no,
+            </if>
+        </trim>
+        values
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="title != null and title != ''">
+                #{title},
+            </if>
+            <if test="year != null ">
+                #{year},
+            </if>
+            <if test="genre != null and genre != ''">
+                #{genre},
+            </if>
+            <if test="duration != null ">
+                #{duration},
+            </if>
+            <if test="description != null and description != ''">
+                #{description},
+            </if>
+            <if test="investment != null ">
+                #{investment},
+            </if>
+            <if test="releaseDate != null ">
+                #{releaseDate},
+            </if>
+            <if test="companyNo != null and companyNo != ''">
+                #{companyNo},
+            </if>
+        </trim>
+    </insert>
+
+    <insert id="batchInsertMovie" parameterType="java.util.List">
+        insert into movie
+            (title, year, genre, duration, description, investment, release_date, company_no)
+        values
+        <foreach collection="list" item="item" index="index" separator=",">
+            (#{item.title}, #{item.year}, #{item.genre}, #{item.duration}, #{item.description}, #{item.investment}, #{item.releaseDate}, #{item.companyNo})
+        </foreach>
+    </insert>
+
+    <update id="updateMovie" parameterType="com.example.performance.domain.Movie">
+        update movie
+        <trim prefix="SET" suffixOverrides=",">
+            <if test="duration != null ">
+                duration = #{duration},
+            </if>
+            <if test="description != null and description != ''">
+                description = #{description},
+            </if>
+            <if test="investment != null ">
+                investment = #{investment},
+            </if>
+            <if test="releaseDate != null ">
+                release_date = #{releaseDate},
+            </if>
+            <if test="companyNo != null and companyNo != ''">
+                company_no = #{companyNo},
+            </if>
+        </trim>
+        where title = #{title} and year = #{year} and genre = #{genre}
+    </update>
+
+    <update id="batchUpdateMovie" parameterType="java.util.List">
+        <foreach collection="list" item="item" index="index" open="" close="" separator=";">
+            update movie
+            <trim prefix="SET" suffixOverrides=",">
+                <if test="item.duration != null ">
+                    duration = #{item.duration},
+                </if>
+                <if test="item.description != null and item.description != ''">
+                    description = #{item.description},
+                </if>
+                <if test="item.investment != null ">
+                    investment = #{item.investment},
+                </if>
+                <if test="item.releaseDate != null ">
+                    release_date = #{item.releaseDate},
+                </if>
+                <if test="item.companyNo != null and item.companyNo != ''">
+                    company_no = #{item.companyNo},
+                </if>
+            </trim>
+            where title = #{item.title} and year = #{item.year} and genre = #{item.genre}
+        </foreach>
+    </update>
+
+    <delete id="deleteMovieByTitleAndYearAndGenre">
+        delete from movie
+        where title = #{title} and year = #{year} and genre = #{genre}
+    </delete>
+
+    <delete id="deleteMovie" parameterType="com.example.performance.domain.Movie">
+        delete from movie
+        <where>
+            true
+            <if test="title != null and title != ''">
+                and title = #{title}
+            </if>
+            <if test="year != null ">
+                and year = #{year}
+            </if>
+            <if test="genre != null and genre != ''">
+                and genre = #{genre}
+            </if>
+            <if test="duration != null ">
+                and duration = #{duration}
+            </if>
+            <if test="description != null and description != ''">
+                and description = #{description}
+            </if>
+            <if test="investment != null ">
+                and investment = #{investment}
+            </if>
+            <if test="releaseDate != null ">
+                and release_date = #{releaseDate}
+            </if>
+            <if test="companyNo != null and companyNo != ''">
+                and company_no = #{companyNo}
+            </if>
+        </where>
+
+    </delete>
+
+    <delete id="batchDeleteMovie" parameterType="java.util.List">
+        delete from movie
+        where (title, year, genre) in
+        <foreach item="item" collection="list" open="(" separator=", " close=")">
+            (#{item.title}, #{item.year}, #{item.genre})
+        </foreach>
+    </delete>
+
+    <delete id="deleteMovieByTitleArrAndYearArrAndGenreArr">
+        delete from movie
+        where
+        <choose>
+            <when test="titleArr != null and titleArr.length > 0  and yearArr != null and yearArr.length > 0  and genreArr != null and genreArr.length > 0  and {titleArr.length, yearArr.length, genreArr.length}.stream().distinct().count() == 1">
+                (title, year, genre) in
+                <foreach item="title" index="i" collection="titleArr" open="(" separator=", " close=")">
+                    (#{titleArr[${i}]}, #{yearArr[${i}]}, #{genreArr[${i}]})
+                </foreach>
+            </when>
+            <otherwise>
+                false
+            </otherwise>
+        </choose>
+
+    </delete>
+
+    <update id="saveMovieByTitleAndYearAndGenre" parameterType="com.example.performance.domain.Movie">
+        insert into movie
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="title != null and title != ''">
+                title,
+            </if>
+            <if test="year != null ">
+                year,
+            </if>
+            <if test="genre != null and genre != ''">
+                genre,
+            </if>
+            <if test="duration != null ">
+                duration,
+            </if>
+            <if test="description != null and description != ''">
+                description,
+            </if>
+            <if test="investment != null ">
+                investment,
+            </if>
+            <if test="releaseDate != null ">
+                release_date,
+            </if>
+            <if test="companyNo != null and companyNo != ''">
+                company_no,
+            </if>
+        </trim>
+        values
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="title != null and title != ''">
+                #{title},
+            </if>
+            <if test="year != null ">
+                #{year},
+            </if>
+            <if test="genre != null and genre != ''">
+                #{genre},
+            </if>
+            <if test="duration != null ">
+                #{duration},
+            </if>
+            <if test="description != null and description != ''">
+                #{description},
+            </if>
+            <if test="investment != null ">
+                #{investment},
+            </if>
+            <if test="releaseDate != null ">
+                #{releaseDate},
+            </if>
+            <if test="companyNo != null and companyNo != ''">
+                #{companyNo},
+            </if>
+        </trim>
+        on duplicate key update
+        <trim suffixOverrides=",">
+            <if test="duration != null ">
+                duration = #{duration},
+            </if>
+            <if test="description != null and description != ''">
+                description = #{description},
+            </if>
+            <if test="investment != null ">
+                investment = #{investment},
+            </if>
+            <if test="releaseDate != null ">
+                release_date = #{releaseDate},
+            </if>
+            <if test="companyNo != null and companyNo != ''">
+                company_no = #{companyNo},
+            </if>
+        </trim>
+    </update>
+
+    <update id="batchSaveMovieByTitleAndYearAndGenre" parameterType="java.util.List">
+        insert into movie
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            title,
+            year,
+            genre,
+            duration,
+            description,
+            investment,
+            release_date,
+            company_no,
+        </trim>
+        values
+        <foreach item="item" index="i" collection="list" open="" separator=", " close="">
+            (
+                #{item.title},
+                #{item.year},
+                #{item.genre},
+                #{item.duration},
+                #{item.description},
+                #{item.investment},
+                #{item.releaseDate},
+                #{item.companyNo}
+            )
+        </foreach>
+        on duplicate key update
+            duration = case when values(duration) is not null then values(duration) else duration end,
+            description = case when values(description) is not null and values(description) != ''then values(description) else description end,
+            investment = case when values(investment) is not null then values(investment) else investment end,
+            release_date = case when values(release_date) is not null then values(release_date) else release_date end,
+            company_no = case when values(company_no) is not null and values(company_no) != ''then values(company_no) else company_no end
+    </update>
+
+
+
+</mapper>

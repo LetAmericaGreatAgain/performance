@@ -1,0 +1,866 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.example.performance.mapper.ActorMapper">
+    <resultMap type="com.example.performance.domain.Actor" id="ActorResult">
+        <id property="firstName" column="first_name" />
+        <id property="lastName" column="last_name" />
+        <result property="age" column="age" />
+        <result property="gender" column="gender" />
+        <result property="companyNo" column="company_no" />
+        <result property="email" column="email" />
+        <result property="birthDate" column="birth_date" />
+        <result property="debutTime" column="debut_time" />
+        <result property="movieTitle" column="movie_title" />
+        <result property="movieYear" column="movie_year" />
+        <result property="movieGenre" column="movie_genre" />
+    </resultMap>
+
+    <sql id="selectActorVo">
+        select
+        <trim prefix="" suffix="" suffixOverrides=",">
+            actor.first_name,
+            actor.last_name,
+            actor.age,
+            actor.gender,
+            actor.company_no,
+            actor.email,
+            actor.birth_date,
+            actor.debut_time,
+            actor.movie_title,
+            actor.movie_year,
+            actor.movie_genre,
+        </trim>
+        from actor 
+    </sql>
+
+
+    <select id="selectActorByFirstNameAndLastName" parameterType="com.example.performance.domain.Actor" resultMap="ActorResult">
+        <include refid="selectActorVo"/>
+        where actor.first_name = #{firstName} and actor.last_name = #{lastName}
+    </select>
+
+    <select id="selectActorList" parameterType="com.example.performance.domain.Actor" resultMap="ActorResult">
+        <include refid="selectActorVo"/>
+        <where>
+            true
+            <if test="firstName != null and firstName != ''">
+                and actor.first_name = #{firstName}
+            </if>
+            <if test="lastName != null and lastName != ''">
+                and actor.last_name = #{lastName}
+            </if>
+            <if test="age != null ">
+                and actor.age = #{age}
+            </if>
+            <if test="gender != null and gender != ''">
+                and actor.gender = #{gender}
+            </if>
+            <if test="companyNo != null and companyNo != ''">
+                and actor.company_no = #{companyNo}
+            </if>
+            <if test="email != null and email != ''">
+                and actor.email = #{email}
+            </if>
+            <if test="birthDate != null ">
+                and actor.birth_date = #{birthDate}
+            </if>
+            <if test="debutTime != null ">
+                and actor.debut_time = #{debutTime}
+            </if>
+            <if test="movieTitle != null and movieTitle != ''">
+                and actor.movie_title = #{movieTitle}
+            </if>
+            <if test="movieYear != null ">
+                and actor.movie_year = #{movieYear}
+            </if>
+            <if test="movieGenre != null and movieGenre != ''">
+                and actor.movie_genre = #{movieGenre}
+            </if>
+        </where>
+    </select>
+
+    <select id="actorFixedColumnInQuery" resultMap="ActorResult">
+        <include refid="selectActorVo"/>
+        where
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+                <if test="list[0].firstName != null and list[0].firstName != ''">
+                    actor.first_name,
+                </if>
+
+                <if test="list[0].lastName != null and list[0].lastName != ''">
+                    actor.last_name,
+                </if>
+
+                <if test="list[0].age != null ">
+                    actor.age,
+                </if>
+
+                <if test="list[0].gender != null and list[0].gender != ''">
+                    actor.gender,
+                </if>
+
+                <if test="list[0].companyNo != null and list[0].companyNo != ''">
+                    actor.company_no,
+                </if>
+
+                <if test="list[0].email != null and list[0].email != ''">
+                    actor.email,
+                </if>
+
+                <if test="list[0].birthDate != null ">
+                    actor.birth_date,
+                </if>
+
+                <if test="list[0].debutTime != null ">
+                    actor.debut_time,
+                </if>
+
+                <if test="list[0].movieTitle != null and list[0].movieTitle != ''">
+                    actor.movie_title,
+                </if>
+
+                <if test="list[0].movieYear != null ">
+                    actor.movie_year,
+                </if>
+
+                <if test="list[0].movieGenre != null and list[0].movieGenre != ''">
+                    actor.movie_genre,
+                </if>
+        </trim>
+        in
+        <foreach item="item" index="i" collection="list" open="(" separator=", " close=")">
+            <trim prefix="(" suffix=")" suffixOverrides=",">
+                <if test="list[0].firstName != null and list[0].firstName != ''">
+                    #{item.firstName},
+                </if>
+                <if test="list[0].lastName != null and list[0].lastName != ''">
+                    #{item.lastName},
+                </if>
+                <if test="list[0].age != null ">
+                    #{item.age},
+                </if>
+                <if test="list[0].gender != null and list[0].gender != ''">
+                    #{item.gender},
+                </if>
+                <if test="list[0].companyNo != null and list[0].companyNo != ''">
+                    #{item.companyNo},
+                </if>
+                <if test="list[0].email != null and list[0].email != ''">
+                    #{item.email},
+                </if>
+                <if test="list[0].birthDate != null ">
+                    #{item.birthDate},
+                </if>
+                <if test="list[0].debutTime != null ">
+                    #{item.debutTime},
+                </if>
+                <if test="list[0].movieTitle != null and list[0].movieTitle != ''">
+                    #{item.movieTitle},
+                </if>
+                <if test="list[0].movieYear != null ">
+                    #{item.movieYear},
+                </if>
+                <if test="list[0].movieGenre != null and list[0].movieGenre != ''">
+                    #{item.movieGenre},
+                </if>
+            </trim>
+        </foreach>
+
+    </select>
+
+
+    <select id="actorMultiColumnOrQuery" resultMap="ActorResult">
+        <include refid="selectActorVo"/>
+        where
+        <foreach item="item" index="i" collection="list" open="" separator=" or " close="">
+            <trim prefix="(" suffix=")" suffixOverrides=",">
+                <if test="item.firstName != null and item.firstName != ''">
+                    actor.first_name,
+                </if>
+                <if test="item.lastName != null and item.lastName != ''">
+                    actor.last_name,
+                </if>
+                <if test="item.age != null ">
+                    actor.age,
+                </if>
+                <if test="item.gender != null and item.gender != ''">
+                    actor.gender,
+                </if>
+                <if test="item.companyNo != null and item.companyNo != ''">
+                    actor.company_no,
+                </if>
+                <if test="item.email != null and item.email != ''">
+                    actor.email,
+                </if>
+                <if test="item.birthDate != null ">
+                    actor.birth_date,
+                </if>
+                <if test="item.debutTime != null ">
+                    actor.debut_time,
+                </if>
+                <if test="item.movieTitle != null and item.movieTitle != ''">
+                    actor.movie_title,
+                </if>
+                <if test="item.movieYear != null ">
+                    actor.movie_year,
+                </if>
+                <if test="item.movieGenre != null and item.movieGenre != ''">
+                    actor.movie_genre,
+                </if>
+            </trim>
+            =
+            <trim prefix="(" suffix=")" suffixOverrides=",">
+                <if test="item.firstName != null and item.firstName != ''">
+                    #{item.firstName},
+                </if>
+                <if test="item.lastName != null and item.lastName != ''">
+                    #{item.lastName},
+                </if>
+                <if test="item.age != null ">
+                    #{item.age},
+                </if>
+                <if test="item.gender != null and item.gender != ''">
+                    #{item.gender},
+                </if>
+                <if test="item.companyNo != null and item.companyNo != ''">
+                    #{item.companyNo},
+                </if>
+                <if test="item.email != null and item.email != ''">
+                    #{item.email},
+                </if>
+                <if test="item.birthDate != null ">
+                    #{item.birthDate},
+                </if>
+                <if test="item.debutTime != null ">
+                    #{item.debutTime},
+                </if>
+                <if test="item.movieTitle != null and item.movieTitle != ''">
+                    #{item.movieTitle},
+                </if>
+                <if test="item.movieYear != null ">
+                    #{item.movieYear},
+                </if>
+                <if test="item.movieGenre != null and item.movieGenre != ''">
+                    #{item.movieGenre},
+                </if>
+            </trim>
+        </foreach>
+    </select>
+
+    <select id="actorMultiColumnInQuery" resultMap="ActorResult">
+        <include refid="selectActorVo"/>
+        where
+        <foreach item="item" index="i" collection="list" open="" separator=" or " close="">
+            <trim prefix="(" suffix=")" suffixOverrides=",">
+                <if test="item.firstName != null and item.firstName != ''">
+                    actor.first_name,
+                </if>
+                <if test="item.lastName != null and item.lastName != ''">
+                    actor.last_name,
+                </if>
+                <if test="item.age != null ">
+                    actor.age,
+                </if>
+                <if test="item.gender != null and item.gender != ''">
+                    actor.gender,
+                </if>
+                <if test="item.companyNo != null and item.companyNo != ''">
+                    actor.company_no,
+                </if>
+                <if test="item.email != null and item.email != ''">
+                    actor.email,
+                </if>
+                <if test="item.birthDate != null ">
+                    actor.birth_date,
+                </if>
+                <if test="item.debutTime != null ">
+                    actor.debut_time,
+                </if>
+                <if test="item.movieTitle != null and item.movieTitle != ''">
+                    actor.movie_title,
+                </if>
+                <if test="item.movieYear != null ">
+                    actor.movie_year,
+                </if>
+                <if test="item.movieGenre != null and item.movieGenre != ''">
+                    actor.movie_genre,
+                </if>
+            </trim>
+            in
+            <trim prefix="((" suffix="))" suffixOverrides=",">
+                <if test="item.firstName != null and item.firstName != ''">
+                    #{item.firstName},
+                </if>
+                <if test="item.lastName != null and item.lastName != ''">
+                    #{item.lastName},
+                </if>
+                <if test="item.age != null ">
+                    #{item.age},
+                </if>
+                <if test="item.gender != null and item.gender != ''">
+                    #{item.gender},
+                </if>
+                <if test="item.companyNo != null and item.companyNo != ''">
+                    #{item.companyNo},
+                </if>
+                <if test="item.email != null and item.email != ''">
+                    #{item.email},
+                </if>
+                <if test="item.birthDate != null ">
+                    #{item.birthDate},
+                </if>
+                <if test="item.debutTime != null ">
+                    #{item.debutTime},
+                </if>
+                <if test="item.movieTitle != null and item.movieTitle != ''">
+                    #{item.movieTitle},
+                </if>
+                <if test="item.movieYear != null ">
+                    #{item.movieYear},
+                </if>
+                <if test="item.movieGenre != null and item.movieGenre != ''">
+                    #{item.movieGenre},
+                </if>
+            </trim>
+        </foreach>
+
+    </select>
+
+    <select id="actorMultiColumnUnionQuery" resultMap="ActorResult">
+        <foreach item="item" index="i" collection="list" open="" separator=" union " close="">
+            <trim prefix="(" suffix=")" suffixOverrides="">
+                <include refid="selectActorVo"/>
+                where
+                <trim prefix="(" suffix=")" suffixOverrides=",">
+                    <if test="item.firstName != null and item.firstName != ''">
+                        actor.first_name,
+                    </if>
+                    <if test="item.lastName != null and item.lastName != ''">
+                        actor.last_name,
+                    </if>
+                    <if test="item.age != null ">
+                        actor.age,
+                    </if>
+                    <if test="item.gender != null and item.gender != ''">
+                        actor.gender,
+                    </if>
+                    <if test="item.companyNo != null and item.companyNo != ''">
+                        actor.company_no,
+                    </if>
+                    <if test="item.email != null and item.email != ''">
+                        actor.email,
+                    </if>
+                    <if test="item.birthDate != null ">
+                        actor.birth_date,
+                    </if>
+                    <if test="item.debutTime != null ">
+                        actor.debut_time,
+                    </if>
+                    <if test="item.movieTitle != null and item.movieTitle != ''">
+                        actor.movie_title,
+                    </if>
+                    <if test="item.movieYear != null ">
+                        actor.movie_year,
+                    </if>
+                    <if test="item.movieGenre != null and item.movieGenre != ''">
+                        actor.movie_genre,
+                    </if>
+                </trim>
+                =
+                <trim prefix="(" suffix=")" suffixOverrides=",">
+                    <if test="item.firstName != null and item.firstName != ''">
+                        #{item.firstName},
+                    </if>
+                    <if test="item.lastName != null and item.lastName != ''">
+                        #{item.lastName},
+                    </if>
+                    <if test="item.age != null ">
+                        #{item.age},
+                    </if>
+                    <if test="item.gender != null and item.gender != ''">
+                        #{item.gender},
+                    </if>
+                    <if test="item.companyNo != null and item.companyNo != ''">
+                        #{item.companyNo},
+                    </if>
+                    <if test="item.email != null and item.email != ''">
+                        #{item.email},
+                    </if>
+                    <if test="item.birthDate != null ">
+                        #{item.birthDate},
+                    </if>
+                    <if test="item.debutTime != null ">
+                        #{item.debutTime},
+                    </if>
+                    <if test="item.movieTitle != null and item.movieTitle != ''">
+                        #{item.movieTitle},
+                    </if>
+                    <if test="item.movieYear != null ">
+                        #{item.movieYear},
+                    </if>
+                    <if test="item.movieGenre != null and item.movieGenre != ''">
+                        #{item.movieGenre},
+                    </if>
+                </trim>
+            </trim>
+        </foreach>
+    </select>
+
+    <select id="actorMultiColumnUnionAllQuery" resultMap="ActorResult">
+        <foreach item="item" index="i" collection="list" open="(" separator=" union all " close=")">
+            <trim prefix="(" suffix=")" suffixOverrides="">
+                <include refid="selectActorVo"/>
+                where
+                <trim prefix="(" suffix=")" suffixOverrides=",">
+                    <if test="item.firstName != null and item.firstName != ''">
+                        actor.first_name,
+                    </if>
+                    <if test="item.lastName != null and item.lastName != ''">
+                        actor.last_name,
+                    </if>
+                    <if test="item.age != null ">
+                        actor.age,
+                    </if>
+                    <if test="item.gender != null and item.gender != ''">
+                        actor.gender,
+                    </if>
+                    <if test="item.companyNo != null and item.companyNo != ''">
+                        actor.company_no,
+                    </if>
+                    <if test="item.email != null and item.email != ''">
+                        actor.email,
+                    </if>
+                    <if test="item.birthDate != null ">
+                        actor.birth_date,
+                    </if>
+                    <if test="item.debutTime != null ">
+                        actor.debut_time,
+                    </if>
+                    <if test="item.movieTitle != null and item.movieTitle != ''">
+                        actor.movie_title,
+                    </if>
+                    <if test="item.movieYear != null ">
+                        actor.movie_year,
+                    </if>
+                    <if test="item.movieGenre != null and item.movieGenre != ''">
+                        actor.movie_genre,
+                    </if>
+                </trim>
+                =
+                <trim prefix="(" suffix=")" suffixOverrides=",">
+                    <if test="item.firstName != null and item.firstName != ''">
+                        #{item.firstName},
+                    </if>
+                    <if test="item.lastName != null and item.lastName != ''">
+                        #{item.lastName},
+                    </if>
+                    <if test="item.age != null ">
+                        #{item.age},
+                    </if>
+                    <if test="item.gender != null and item.gender != ''">
+                        #{item.gender},
+                    </if>
+                    <if test="item.companyNo != null and item.companyNo != ''">
+                        #{item.companyNo},
+                    </if>
+                    <if test="item.email != null and item.email != ''">
+                        #{item.email},
+                    </if>
+                    <if test="item.birthDate != null ">
+                        #{item.birthDate},
+                    </if>
+                    <if test="item.debutTime != null ">
+                        #{item.debutTime},
+                    </if>
+                    <if test="item.movieTitle != null and item.movieTitle != ''">
+                        #{item.movieTitle},
+                    </if>
+                    <if test="item.movieYear != null ">
+                        #{item.movieYear},
+                    </if>
+                    <if test="item.movieGenre != null and item.movieGenre != ''">
+                        #{item.movieGenre},
+                    </if>
+                </trim>
+            </trim>
+        </foreach>
+    </select>
+
+    <insert id="insertActor" parameterType="com.example.performance.domain.Actor">
+        insert into actor
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="firstName != null and firstName != ''">
+                first_name,
+            </if>
+            <if test="lastName != null and lastName != ''">
+                last_name,
+            </if>
+            <if test="age != null ">
+                age,
+            </if>
+            <if test="gender != null and gender != ''">
+                gender,
+            </if>
+            <if test="companyNo != null and companyNo != ''">
+                company_no,
+            </if>
+            <if test="email != null and email != ''">
+                email,
+            </if>
+            <if test="birthDate != null ">
+                birth_date,
+            </if>
+            <if test="debutTime != null ">
+                debut_time,
+            </if>
+            <if test="movieTitle != null and movieTitle != ''">
+                movie_title,
+            </if>
+            <if test="movieYear != null ">
+                movie_year,
+            </if>
+            <if test="movieGenre != null and movieGenre != ''">
+                movie_genre,
+            </if>
+        </trim>
+        values
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="firstName != null and firstName != ''">
+                #{firstName},
+            </if>
+            <if test="lastName != null and lastName != ''">
+                #{lastName},
+            </if>
+            <if test="age != null ">
+                #{age},
+            </if>
+            <if test="gender != null and gender != ''">
+                #{gender},
+            </if>
+            <if test="companyNo != null and companyNo != ''">
+                #{companyNo},
+            </if>
+            <if test="email != null and email != ''">
+                #{email},
+            </if>
+            <if test="birthDate != null ">
+                #{birthDate},
+            </if>
+            <if test="debutTime != null ">
+                #{debutTime},
+            </if>
+            <if test="movieTitle != null and movieTitle != ''">
+                #{movieTitle},
+            </if>
+            <if test="movieYear != null ">
+                #{movieYear},
+            </if>
+            <if test="movieGenre != null and movieGenre != ''">
+                #{movieGenre},
+            </if>
+        </trim>
+    </insert>
+
+    <insert id="batchInsertActor" parameterType="java.util.List">
+        insert into actor
+            (first_name, last_name, age, gender, company_no, email, birth_date, debut_time, movie_title, movie_year, movie_genre)
+        values
+        <foreach collection="list" item="item" index="index" separator=",">
+            (#{item.firstName}, #{item.lastName}, #{item.age}, #{item.gender}, #{item.companyNo}, #{item.email}, #{item.birthDate}, #{item.debutTime}, #{item.movieTitle}, #{item.movieYear}, #{item.movieGenre})
+        </foreach>
+    </insert>
+
+    <update id="updateActor" parameterType="com.example.performance.domain.Actor">
+        update actor
+        <trim prefix="SET" suffixOverrides=",">
+            <if test="age != null ">
+                age = #{age},
+            </if>
+            <if test="gender != null and gender != ''">
+                gender = #{gender},
+            </if>
+            <if test="companyNo != null and companyNo != ''">
+                company_no = #{companyNo},
+            </if>
+            <if test="email != null and email != ''">
+                email = #{email},
+            </if>
+            <if test="birthDate != null ">
+                birth_date = #{birthDate},
+            </if>
+            <if test="debutTime != null ">
+                debut_time = #{debutTime},
+            </if>
+            <if test="movieTitle != null and movieTitle != ''">
+                movie_title = #{movieTitle},
+            </if>
+            <if test="movieYear != null ">
+                movie_year = #{movieYear},
+            </if>
+            <if test="movieGenre != null and movieGenre != ''">
+                movie_genre = #{movieGenre},
+            </if>
+        </trim>
+        where first_name = #{firstName} and last_name = #{lastName}
+    </update>
+
+    <update id="batchUpdateActor" parameterType="java.util.List">
+        <foreach collection="list" item="item" index="index" open="" close="" separator=";">
+            update actor
+            <trim prefix="SET" suffixOverrides=",">
+                <if test="item.age != null ">
+                    age = #{item.age},
+                </if>
+                <if test="item.gender != null and item.gender != ''">
+                    gender = #{item.gender},
+                </if>
+                <if test="item.companyNo != null and item.companyNo != ''">
+                    company_no = #{item.companyNo},
+                </if>
+                <if test="item.email != null and item.email != ''">
+                    email = #{item.email},
+                </if>
+                <if test="item.birthDate != null ">
+                    birth_date = #{item.birthDate},
+                </if>
+                <if test="item.debutTime != null ">
+                    debut_time = #{item.debutTime},
+                </if>
+                <if test="item.movieTitle != null and item.movieTitle != ''">
+                    movie_title = #{item.movieTitle},
+                </if>
+                <if test="item.movieYear != null ">
+                    movie_year = #{item.movieYear},
+                </if>
+                <if test="item.movieGenre != null and item.movieGenre != ''">
+                    movie_genre = #{item.movieGenre},
+                </if>
+            </trim>
+            where first_name = #{item.firstName} and last_name = #{item.lastName}
+        </foreach>
+    </update>
+
+    <delete id="deleteActorByFirstNameAndLastName">
+        delete from actor
+        where first_name = #{firstName} and last_name = #{lastName}
+    </delete>
+
+    <delete id="deleteActor" parameterType="com.example.performance.domain.Actor">
+        delete from actor
+        <where>
+            true
+            <if test="firstName != null and firstName != ''">
+                and first_name = #{firstName}
+            </if>
+            <if test="lastName != null and lastName != ''">
+                and last_name = #{lastName}
+            </if>
+            <if test="age != null ">
+                and age = #{age}
+            </if>
+            <if test="gender != null and gender != ''">
+                and gender = #{gender}
+            </if>
+            <if test="companyNo != null and companyNo != ''">
+                and company_no = #{companyNo}
+            </if>
+            <if test="email != null and email != ''">
+                and email = #{email}
+            </if>
+            <if test="birthDate != null ">
+                and birth_date = #{birthDate}
+            </if>
+            <if test="debutTime != null ">
+                and debut_time = #{debutTime}
+            </if>
+            <if test="movieTitle != null and movieTitle != ''">
+                and movie_title = #{movieTitle}
+            </if>
+            <if test="movieYear != null ">
+                and movie_year = #{movieYear}
+            </if>
+            <if test="movieGenre != null and movieGenre != ''">
+                and movie_genre = #{movieGenre}
+            </if>
+        </where>
+
+    </delete>
+
+    <delete id="batchDeleteActor" parameterType="java.util.List">
+        delete from actor
+        where (first_name, last_name) in
+        <foreach item="item" collection="list" open="(" separator=", " close=")">
+            (#{item.firstName}, #{item.lastName})
+        </foreach>
+    </delete>
+
+    <delete id="deleteActorByFirstNameArrAndLastNameArr">
+        delete from actor
+        where
+        <choose>
+            <when test="firstNameArr != null and firstNameArr.length > 0  and lastNameArr != null and lastNameArr.length > 0  and {firstNameArr.length, lastNameArr.length}.stream().distinct().count() == 1">
+                (first_name, last_name) in
+                <foreach item="firstName" index="i" collection="firstNameArr" open="(" separator=", " close=")">
+                    (#{firstNameArr[${i}]}, #{lastNameArr[${i}]})
+                </foreach>
+            </when>
+            <otherwise>
+                false
+            </otherwise>
+        </choose>
+
+    </delete>
+
+    <update id="saveActorByFirstNameAndLastName" parameterType="com.example.performance.domain.Actor">
+        insert into actor
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="firstName != null and firstName != ''">
+                first_name,
+            </if>
+            <if test="lastName != null and lastName != ''">
+                last_name,
+            </if>
+            <if test="age != null ">
+                age,
+            </if>
+            <if test="gender != null and gender != ''">
+                gender,
+            </if>
+            <if test="companyNo != null and companyNo != ''">
+                company_no,
+            </if>
+            <if test="email != null and email != ''">
+                email,
+            </if>
+            <if test="birthDate != null ">
+                birth_date,
+            </if>
+            <if test="debutTime != null ">
+                debut_time,
+            </if>
+            <if test="movieTitle != null and movieTitle != ''">
+                movie_title,
+            </if>
+            <if test="movieYear != null ">
+                movie_year,
+            </if>
+            <if test="movieGenre != null and movieGenre != ''">
+                movie_genre,
+            </if>
+        </trim>
+        values
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="firstName != null and firstName != ''">
+                #{firstName},
+            </if>
+            <if test="lastName != null and lastName != ''">
+                #{lastName},
+            </if>
+            <if test="age != null ">
+                #{age},
+            </if>
+            <if test="gender != null and gender != ''">
+                #{gender},
+            </if>
+            <if test="companyNo != null and companyNo != ''">
+                #{companyNo},
+            </if>
+            <if test="email != null and email != ''">
+                #{email},
+            </if>
+            <if test="birthDate != null ">
+                #{birthDate},
+            </if>
+            <if test="debutTime != null ">
+                #{debutTime},
+            </if>
+            <if test="movieTitle != null and movieTitle != ''">
+                #{movieTitle},
+            </if>
+            <if test="movieYear != null ">
+                #{movieYear},
+            </if>
+            <if test="movieGenre != null and movieGenre != ''">
+                #{movieGenre},
+            </if>
+        </trim>
+        on duplicate key update
+        <trim suffixOverrides=",">
+            <if test="age != null ">
+                age = #{age},
+            </if>
+            <if test="gender != null and gender != ''">
+                gender = #{gender},
+            </if>
+            <if test="companyNo != null and companyNo != ''">
+                company_no = #{companyNo},
+            </if>
+            <if test="email != null and email != ''">
+                email = #{email},
+            </if>
+            <if test="birthDate != null ">
+                birth_date = #{birthDate},
+            </if>
+            <if test="debutTime != null ">
+                debut_time = #{debutTime},
+            </if>
+            <if test="movieTitle != null and movieTitle != ''">
+                movie_title = #{movieTitle},
+            </if>
+            <if test="movieYear != null ">
+                movie_year = #{movieYear},
+            </if>
+            <if test="movieGenre != null and movieGenre != ''">
+                movie_genre = #{movieGenre},
+            </if>
+        </trim>
+    </update>
+
+    <update id="batchSaveActorByFirstNameAndLastName" parameterType="java.util.List">
+        insert into actor
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            first_name,
+            last_name,
+            age,
+            gender,
+            company_no,
+            email,
+            birth_date,
+            debut_time,
+            movie_title,
+            movie_year,
+            movie_genre,
+        </trim>
+        values
+        <foreach item="item" index="i" collection="list" open="" separator=", " close="">
+            (
+                #{item.firstName},
+                #{item.lastName},
+                #{item.age},
+                #{item.gender},
+                #{item.companyNo},
+                #{item.email},
+                #{item.birthDate},
+                #{item.debutTime},
+                #{item.movieTitle},
+                #{item.movieYear},
+                #{item.movieGenre}
+            )
+        </foreach>
+        on duplicate key update
+            age = case when values(age) is not null then values(age) else age end,
+            gender = case when values(gender) is not null and values(gender) != ''then values(gender) else gender end,
+            company_no = case when values(company_no) is not null and values(company_no) != ''then values(company_no) else company_no end,
+            email = case when values(email) is not null and values(email) != ''then values(email) else email end,
+            birth_date = case when values(birth_date) is not null then values(birth_date) else birth_date end,
+            debut_time = case when values(debut_time) is not null then values(debut_time) else debut_time end,
+            movie_title = case when values(movie_title) is not null and values(movie_title) != ''then values(movie_title) else movie_title end,
+            movie_year = case when values(movie_year) is not null then values(movie_year) else movie_year end,
+            movie_genre = case when values(movie_genre) is not null and values(movie_genre) != ''then values(movie_genre) else movie_genre end
+    </update>
+
+
+
+</mapper>

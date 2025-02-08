@@ -1,0 +1,699 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.example.performance.mapper.CompanyMapper">
+    <resultMap type="com.example.performance.domain.Company" id="CompanyResult">
+        <id property="no" column="no" />
+        <result property="companyName" column="company_name" />
+        <result property="companyAddress" column="company_address" />
+        <result property="country" column="country" />
+        <result property="registrationDate" column="registration_date" />
+        <result property="paidUpCapital" column="paid_up_capital" />
+        <association property="boss" javaType="com.example.performance.domain.Boss">
+            <id property="idCard" column="id_card_2_2_1" />
+            <result property="name" column="name_2_2_2" />
+            <result property="age" column="age_2_2_3" />
+            <result property="gender" column="gender_2_2_4" />
+            <result property="address" column="address_2_2_5" />
+            <result property="phone" column="phone_2_2_6" />
+            <result property="email" column="email_2_2_7" />
+            <result property="companyNo" column="company_no_2_2_8" />
+        </association>
+        <collection property="directorList" javaType="java.util.List" ofType="com.example.performance.domain.Director">
+            <id property="firstName" column="first_name_3_2_1" />
+            <id property="lastName" column="last_name_3_2_2" />
+            <result property="age" column="age_3_2_3" />
+            <result property="gender" column="gender_3_2_4" />
+            <result property="email" column="email_3_2_5" />
+            <result property="birthDate" column="birth_date_3_2_6" />
+            <result property="companyNo" column="company_no_3_2_7" />
+            <result property="movieTitle" column="movie_title_3_2_8" />
+            <result property="movieYear" column="movie_year_3_2_9" />
+            <result property="movieGenre" column="movie_genre_3_2_10" />
+        </collection>
+        <collection property="actorList" javaType="java.util.List" ofType="com.example.performance.domain.Actor">
+            <id property="firstName" column="first_name_4_2_1" />
+            <id property="lastName" column="last_name_4_2_2" />
+            <result property="age" column="age_4_2_3" />
+            <result property="gender" column="gender_4_2_4" />
+            <result property="companyNo" column="company_no_4_2_5" />
+            <result property="email" column="email_4_2_6" />
+            <result property="birthDate" column="birth_date_4_2_7" />
+            <result property="debutTime" column="debut_time_4_2_8" />
+            <result property="movieTitle" column="movie_title_4_2_9" />
+            <result property="movieYear" column="movie_year_4_2_10" />
+            <result property="movieGenre" column="movie_genre_4_2_11" />
+        </collection>
+        <collection property="movieList" javaType="java.util.List" ofType="com.example.performance.domain.Movie">
+            <id property="title" column="title_5_2_1" />
+            <id property="year" column="year_5_2_2" />
+            <id property="genre" column="genre_5_2_3" />
+            <result property="duration" column="duration_5_2_4" />
+            <result property="description" column="description_5_2_5" />
+            <result property="investment" column="investment_5_2_6" />
+            <result property="releaseDate" column="release_date_5_2_7" />
+            <result property="companyNo" column="company_no_5_2_8" />
+            <association property="director" javaType="com.example.performance.domain.Director">
+                <id property="firstName" column="first_name_6_3_1" />
+                <id property="lastName" column="last_name_6_3_2" />
+                <result property="age" column="age_6_3_3" />
+                <result property="gender" column="gender_6_3_4" />
+                <result property="email" column="email_6_3_5" />
+                <result property="birthDate" column="birth_date_6_3_6" />
+                <result property="companyNo" column="company_no_6_3_7" />
+                <result property="movieTitle" column="movie_title_6_3_8" />
+                <result property="movieYear" column="movie_year_6_3_9" />
+                <result property="movieGenre" column="movie_genre_6_3_10" />
+            </association>
+            <collection property="actorList" javaType="java.util.List" ofType="com.example.performance.domain.Actor">
+                <id property="firstName" column="first_name_7_3_1" />
+                <id property="lastName" column="last_name_7_3_2" />
+                <result property="age" column="age_7_3_3" />
+                <result property="gender" column="gender_7_3_4" />
+                <result property="companyNo" column="company_no_7_3_5" />
+                <result property="email" column="email_7_3_6" />
+                <result property="birthDate" column="birth_date_7_3_7" />
+                <result property="debutTime" column="debut_time_7_3_8" />
+                <result property="movieTitle" column="movie_title_7_3_9" />
+                <result property="movieYear" column="movie_year_7_3_10" />
+                <result property="movieGenre" column="movie_genre_7_3_11" />
+            </collection>
+        </collection>
+    </resultMap>
+
+    <sql id="selectCompanyVo">
+        select
+        <trim prefix="" suffix="" suffixOverrides=",">
+            company.no,
+            company.company_name,
+            company.company_address,
+            company.country,
+            company.registration_date,
+            company.paid_up_capital,
+            boss_2.id_card AS id_card_2_2_1,
+            boss_2.name AS name_2_2_2,
+            boss_2.age AS age_2_2_3,
+            boss_2.gender AS gender_2_2_4,
+            boss_2.address AS address_2_2_5,
+            boss_2.phone AS phone_2_2_6,
+            boss_2.email AS email_2_2_7,
+            boss_2.company_no AS company_no_2_2_8,
+            director_3.first_name AS first_name_3_2_1,
+            director_3.last_name AS last_name_3_2_2,
+            director_3.age AS age_3_2_3,
+            director_3.gender AS gender_3_2_4,
+            director_3.email AS email_3_2_5,
+            director_3.birth_date AS birth_date_3_2_6,
+            director_3.company_no AS company_no_3_2_7,
+            director_3.movie_title AS movie_title_3_2_8,
+            director_3.movie_year AS movie_year_3_2_9,
+            director_3.movie_genre AS movie_genre_3_2_10,
+            actor_4.first_name AS first_name_4_2_1,
+            actor_4.last_name AS last_name_4_2_2,
+            actor_4.age AS age_4_2_3,
+            actor_4.gender AS gender_4_2_4,
+            actor_4.company_no AS company_no_4_2_5,
+            actor_4.email AS email_4_2_6,
+            actor_4.birth_date AS birth_date_4_2_7,
+            actor_4.debut_time AS debut_time_4_2_8,
+            actor_4.movie_title AS movie_title_4_2_9,
+            actor_4.movie_year AS movie_year_4_2_10,
+            actor_4.movie_genre AS movie_genre_4_2_11,
+            movie_5.title AS title_5_2_1,
+            movie_5.year AS year_5_2_2,
+            movie_5.genre AS genre_5_2_3,
+            movie_5.duration AS duration_5_2_4,
+            movie_5.description AS description_5_2_5,
+            movie_5.investment AS investment_5_2_6,
+            movie_5.release_date AS release_date_5_2_7,
+            movie_5.company_no AS company_no_5_2_8,
+            director_6.first_name AS first_name_6_3_1,
+            director_6.last_name AS last_name_6_3_2,
+            director_6.age AS age_6_3_3,
+            director_6.gender AS gender_6_3_4,
+            director_6.email AS email_6_3_5,
+            director_6.birth_date AS birth_date_6_3_6,
+            director_6.company_no AS company_no_6_3_7,
+            director_6.movie_title AS movie_title_6_3_8,
+            director_6.movie_year AS movie_year_6_3_9,
+            director_6.movie_genre AS movie_genre_6_3_10,
+            actor_7.first_name AS first_name_7_3_1,
+            actor_7.last_name AS last_name_7_3_2,
+            actor_7.age AS age_7_3_3,
+            actor_7.gender AS gender_7_3_4,
+            actor_7.company_no AS company_no_7_3_5,
+            actor_7.email AS email_7_3_6,
+            actor_7.birth_date AS birth_date_7_3_7,
+            actor_7.debut_time AS debut_time_7_3_8,
+            actor_7.movie_title AS movie_title_7_3_9,
+            actor_7.movie_year AS movie_year_7_3_10,
+            actor_7.movie_genre AS movie_genre_7_3_11,
+        </trim>
+        from company 
+        LEFT JOIN boss AS boss_2 on company.no = boss_2.company_no
+        LEFT JOIN director AS director_3 on company.no = director_3.company_no
+        LEFT JOIN actor AS actor_4 on company.no = actor_4.company_no
+        LEFT JOIN movie AS movie_5 on company.no = movie_5.company_no
+        LEFT JOIN director AS director_6 on movie_5.title = director_6.movie_title AND movie_5.year = director_6.movie_year AND movie_5.genre = director_6.movie_genre
+        LEFT JOIN actor AS actor_7 on movie_5.title = actor_7.movie_title AND movie_5.year = actor_7.movie_year AND movie_5.genre = actor_7.movie_genre
+    </sql>
+
+
+    <select id="selectCompanyByNo" parameterType="com.example.performance.domain.Company" resultMap="CompanyResult">
+        <include refid="selectCompanyVo"/>
+        where company.no = #{no}
+    </select>
+
+    <select id="selectCompanyList" parameterType="com.example.performance.domain.Company" resultMap="CompanyResult">
+        <include refid="selectCompanyVo"/>
+        <where>
+            true
+            <if test="no != null and no != ''">
+                and company.no = #{no}
+            </if>
+            <if test="companyName != null and companyName != ''">
+                and company.company_name = #{companyName}
+            </if>
+            <if test="companyAddress != null and companyAddress != ''">
+                and company.company_address = #{companyAddress}
+            </if>
+            <if test="country != null and country != ''">
+                and company.country = #{country}
+            </if>
+            <if test="registrationDate != null ">
+                and company.registration_date = #{registrationDate}
+            </if>
+            <if test="paidUpCapital != null ">
+                and company.paid_up_capital = #{paidUpCapital}
+            </if>
+        </where>
+    </select>
+
+    <select id="companyFixedColumnInQuery" resultMap="CompanyResult">
+        <include refid="selectCompanyVo"/>
+        where
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+                <if test="list[0].no != null and list[0].no != ''">
+                    company.no,
+                </if>
+
+                <if test="list[0].companyName != null and list[0].companyName != ''">
+                    company.company_name,
+                </if>
+
+                <if test="list[0].companyAddress != null and list[0].companyAddress != ''">
+                    company.company_address,
+                </if>
+
+                <if test="list[0].country != null and list[0].country != ''">
+                    company.country,
+                </if>
+
+                <if test="list[0].registrationDate != null ">
+                    company.registration_date,
+                </if>
+
+                <if test="list[0].paidUpCapital != null ">
+                    company.paid_up_capital,
+                </if>
+
+
+
+
+        </trim>
+        in
+        <foreach item="item" index="i" collection="list" open="(" separator=", " close=")">
+            <trim prefix="(" suffix=")" suffixOverrides=",">
+                <if test="list[0].no != null and list[0].no != ''">
+                    #{item.no},
+                </if>
+                <if test="list[0].companyName != null and list[0].companyName != ''">
+                    #{item.companyName},
+                </if>
+                <if test="list[0].companyAddress != null and list[0].companyAddress != ''">
+                    #{item.companyAddress},
+                </if>
+                <if test="list[0].country != null and list[0].country != ''">
+                    #{item.country},
+                </if>
+                <if test="list[0].registrationDate != null ">
+                    #{item.registrationDate},
+                </if>
+                <if test="list[0].paidUpCapital != null ">
+                    #{item.paidUpCapital},
+                </if>
+            </trim>
+        </foreach>
+
+    </select>
+
+
+    <select id="companyMultiColumnOrQuery" resultMap="CompanyResult">
+        <include refid="selectCompanyVo"/>
+        where
+        <foreach item="item" index="i" collection="list" open="" separator=" or " close="">
+            <trim prefix="(" suffix=")" suffixOverrides=",">
+                <if test="item.no != null and item.no != ''">
+                    company.no,
+                </if>
+                <if test="item.companyName != null and item.companyName != ''">
+                    company.company_name,
+                </if>
+                <if test="item.companyAddress != null and item.companyAddress != ''">
+                    company.company_address,
+                </if>
+                <if test="item.country != null and item.country != ''">
+                    company.country,
+                </if>
+                <if test="item.registrationDate != null ">
+                    company.registration_date,
+                </if>
+                <if test="item.paidUpCapital != null ">
+                    company.paid_up_capital,
+                </if>
+            </trim>
+            =
+            <trim prefix="(" suffix=")" suffixOverrides=",">
+                <if test="item.no != null and item.no != ''">
+                    #{item.no},
+                </if>
+                <if test="item.companyName != null and item.companyName != ''">
+                    #{item.companyName},
+                </if>
+                <if test="item.companyAddress != null and item.companyAddress != ''">
+                    #{item.companyAddress},
+                </if>
+                <if test="item.country != null and item.country != ''">
+                    #{item.country},
+                </if>
+                <if test="item.registrationDate != null ">
+                    #{item.registrationDate},
+                </if>
+                <if test="item.paidUpCapital != null ">
+                    #{item.paidUpCapital},
+                </if>
+            </trim>
+        </foreach>
+    </select>
+
+    <select id="companyMultiColumnInQuery" resultMap="CompanyResult">
+        <include refid="selectCompanyVo"/>
+        where
+        <foreach item="item" index="i" collection="list" open="" separator=" or " close="">
+            <trim prefix="(" suffix=")" suffixOverrides=",">
+                <if test="item.no != null and item.no != ''">
+                    company.no,
+                </if>
+                <if test="item.companyName != null and item.companyName != ''">
+                    company.company_name,
+                </if>
+                <if test="item.companyAddress != null and item.companyAddress != ''">
+                    company.company_address,
+                </if>
+                <if test="item.country != null and item.country != ''">
+                    company.country,
+                </if>
+                <if test="item.registrationDate != null ">
+                    company.registration_date,
+                </if>
+                <if test="item.paidUpCapital != null ">
+                    company.paid_up_capital,
+                </if>
+            </trim>
+            in
+            <trim prefix="((" suffix="))" suffixOverrides=",">
+                <if test="item.no != null and item.no != ''">
+                    #{item.no},
+                </if>
+                <if test="item.companyName != null and item.companyName != ''">
+                    #{item.companyName},
+                </if>
+                <if test="item.companyAddress != null and item.companyAddress != ''">
+                    #{item.companyAddress},
+                </if>
+                <if test="item.country != null and item.country != ''">
+                    #{item.country},
+                </if>
+                <if test="item.registrationDate != null ">
+                    #{item.registrationDate},
+                </if>
+                <if test="item.paidUpCapital != null ">
+                    #{item.paidUpCapital},
+                </if>
+            </trim>
+        </foreach>
+
+    </select>
+
+    <select id="companyMultiColumnUnionQuery" resultMap="CompanyResult">
+        <foreach item="item" index="i" collection="list" open="" separator=" union " close="">
+            <trim prefix="(" suffix=")" suffixOverrides="">
+                <include refid="selectCompanyVo"/>
+                where
+                <trim prefix="(" suffix=")" suffixOverrides=",">
+                    <if test="item.no != null and item.no != ''">
+                        company.no,
+                    </if>
+                    <if test="item.companyName != null and item.companyName != ''">
+                        company.company_name,
+                    </if>
+                    <if test="item.companyAddress != null and item.companyAddress != ''">
+                        company.company_address,
+                    </if>
+                    <if test="item.country != null and item.country != ''">
+                        company.country,
+                    </if>
+                    <if test="item.registrationDate != null ">
+                        company.registration_date,
+                    </if>
+                    <if test="item.paidUpCapital != null ">
+                        company.paid_up_capital,
+                    </if>
+                </trim>
+                =
+                <trim prefix="(" suffix=")" suffixOverrides=",">
+                    <if test="item.no != null and item.no != ''">
+                        #{item.no},
+                    </if>
+                    <if test="item.companyName != null and item.companyName != ''">
+                        #{item.companyName},
+                    </if>
+                    <if test="item.companyAddress != null and item.companyAddress != ''">
+                        #{item.companyAddress},
+                    </if>
+                    <if test="item.country != null and item.country != ''">
+                        #{item.country},
+                    </if>
+                    <if test="item.registrationDate != null ">
+                        #{item.registrationDate},
+                    </if>
+                    <if test="item.paidUpCapital != null ">
+                        #{item.paidUpCapital},
+                    </if>
+                </trim>
+            </trim>
+        </foreach>
+    </select>
+
+    <select id="companyMultiColumnUnionAllQuery" resultMap="CompanyResult">
+        <foreach item="item" index="i" collection="list" open="(" separator=" union all " close=")">
+            <trim prefix="(" suffix=")" suffixOverrides="">
+                <include refid="selectCompanyVo"/>
+                where
+                <trim prefix="(" suffix=")" suffixOverrides=",">
+                    <if test="item.no != null and item.no != ''">
+                        company.no,
+                    </if>
+                    <if test="item.companyName != null and item.companyName != ''">
+                        company.company_name,
+                    </if>
+                    <if test="item.companyAddress != null and item.companyAddress != ''">
+                        company.company_address,
+                    </if>
+                    <if test="item.country != null and item.country != ''">
+                        company.country,
+                    </if>
+                    <if test="item.registrationDate != null ">
+                        company.registration_date,
+                    </if>
+                    <if test="item.paidUpCapital != null ">
+                        company.paid_up_capital,
+                    </if>
+                </trim>
+                =
+                <trim prefix="(" suffix=")" suffixOverrides=",">
+                    <if test="item.no != null and item.no != ''">
+                        #{item.no},
+                    </if>
+                    <if test="item.companyName != null and item.companyName != ''">
+                        #{item.companyName},
+                    </if>
+                    <if test="item.companyAddress != null and item.companyAddress != ''">
+                        #{item.companyAddress},
+                    </if>
+                    <if test="item.country != null and item.country != ''">
+                        #{item.country},
+                    </if>
+                    <if test="item.registrationDate != null ">
+                        #{item.registrationDate},
+                    </if>
+                    <if test="item.paidUpCapital != null ">
+                        #{item.paidUpCapital},
+                    </if>
+                </trim>
+            </trim>
+        </foreach>
+    </select>
+
+    <insert id="insertCompany" parameterType="com.example.performance.domain.Company">
+        insert into company
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="no != null and no != ''">
+                no,
+            </if>
+            <if test="companyName != null and companyName != ''">
+                company_name,
+            </if>
+            <if test="companyAddress != null and companyAddress != ''">
+                company_address,
+            </if>
+            <if test="country != null and country != ''">
+                country,
+            </if>
+            <if test="registrationDate != null ">
+                registration_date,
+            </if>
+            <if test="paidUpCapital != null ">
+                paid_up_capital,
+            </if>
+        </trim>
+        values
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="no != null and no != ''">
+                #{no},
+            </if>
+            <if test="companyName != null and companyName != ''">
+                #{companyName},
+            </if>
+            <if test="companyAddress != null and companyAddress != ''">
+                #{companyAddress},
+            </if>
+            <if test="country != null and country != ''">
+                #{country},
+            </if>
+            <if test="registrationDate != null ">
+                #{registrationDate},
+            </if>
+            <if test="paidUpCapital != null ">
+                #{paidUpCapital},
+            </if>
+        </trim>
+    </insert>
+
+    <insert id="batchInsertCompany" parameterType="java.util.List">
+        insert into company
+            (no, company_name, company_address, country, registration_date, paid_up_capital)
+        values
+        <foreach collection="list" item="item" index="index" separator=",">
+            (#{item.no}, #{item.companyName}, #{item.companyAddress}, #{item.country}, #{item.registrationDate}, #{item.paidUpCapital})
+        </foreach>
+    </insert>
+
+    <update id="updateCompany" parameterType="com.example.performance.domain.Company">
+        update company
+        <trim prefix="SET" suffixOverrides=",">
+            <if test="companyName != null and companyName != ''">
+                company_name = #{companyName},
+            </if>
+            <if test="companyAddress != null and companyAddress != ''">
+                company_address = #{companyAddress},
+            </if>
+            <if test="country != null and country != ''">
+                country = #{country},
+            </if>
+            <if test="registrationDate != null ">
+                registration_date = #{registrationDate},
+            </if>
+            <if test="paidUpCapital != null ">
+                paid_up_capital = #{paidUpCapital},
+            </if>
+        </trim>
+        where no = #{no}
+    </update>
+
+    <update id="batchUpdateCompany" parameterType="java.util.List">
+        <foreach collection="list" item="item" index="index" open="" close="" separator=";">
+            update company
+            <trim prefix="SET" suffixOverrides=",">
+                <if test="item.companyName != null and item.companyName != ''">
+                    company_name = #{item.companyName},
+                </if>
+                <if test="item.companyAddress != null and item.companyAddress != ''">
+                    company_address = #{item.companyAddress},
+                </if>
+                <if test="item.country != null and item.country != ''">
+                    country = #{item.country},
+                </if>
+                <if test="item.registrationDate != null ">
+                    registration_date = #{item.registrationDate},
+                </if>
+                <if test="item.paidUpCapital != null ">
+                    paid_up_capital = #{item.paidUpCapital},
+                </if>
+            </trim>
+            where no = #{item.no}
+        </foreach>
+    </update>
+
+    <delete id="deleteCompanyByNo">
+        delete from company
+        where no = #{no}
+    </delete>
+
+    <delete id="deleteCompany" parameterType="com.example.performance.domain.Company">
+        delete from company
+        <where>
+            true
+            <if test="no != null and no != ''">
+                and no = #{no}
+            </if>
+            <if test="companyName != null and companyName != ''">
+                and company_name = #{companyName}
+            </if>
+            <if test="companyAddress != null and companyAddress != ''">
+                and company_address = #{companyAddress}
+            </if>
+            <if test="country != null and country != ''">
+                and country = #{country}
+            </if>
+            <if test="registrationDate != null ">
+                and registration_date = #{registrationDate}
+            </if>
+            <if test="paidUpCapital != null ">
+                and paid_up_capital = #{paidUpCapital}
+            </if>
+        </where>
+
+    </delete>
+
+    <delete id="batchDeleteCompany" parameterType="java.util.List">
+        delete from company
+        where (no) in
+        <foreach item="item" collection="list" open="(" separator=", " close=")">
+            (#{item.no})
+        </foreach>
+    </delete>
+
+    <delete id="deleteCompanyByNoArr">
+        delete from company
+        where
+        <choose>
+            <when test="noArr != null and noArr.length > 0  and {noArr.length}.stream().distinct().count() == 1">
+                (no) in
+                <foreach item="no" index="i" collection="noArr" open="(" separator=", " close=")">
+                    (#{noArr[${i}]})
+                </foreach>
+            </when>
+            <otherwise>
+                false
+            </otherwise>
+        </choose>
+
+    </delete>
+
+    <update id="saveCompanyByNo" parameterType="com.example.performance.domain.Company">
+        insert into company
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="no != null and no != ''">
+                no,
+            </if>
+            <if test="companyName != null and companyName != ''">
+                company_name,
+            </if>
+            <if test="companyAddress != null and companyAddress != ''">
+                company_address,
+            </if>
+            <if test="country != null and country != ''">
+                country,
+            </if>
+            <if test="registrationDate != null ">
+                registration_date,
+            </if>
+            <if test="paidUpCapital != null ">
+                paid_up_capital,
+            </if>
+        </trim>
+        values
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="no != null and no != ''">
+                #{no},
+            </if>
+            <if test="companyName != null and companyName != ''">
+                #{companyName},
+            </if>
+            <if test="companyAddress != null and companyAddress != ''">
+                #{companyAddress},
+            </if>
+            <if test="country != null and country != ''">
+                #{country},
+            </if>
+            <if test="registrationDate != null ">
+                #{registrationDate},
+            </if>
+            <if test="paidUpCapital != null ">
+                #{paidUpCapital},
+            </if>
+        </trim>
+        on duplicate key update
+        <trim suffixOverrides=",">
+            <if test="companyName != null and companyName != ''">
+                company_name = #{companyName},
+            </if>
+            <if test="companyAddress != null and companyAddress != ''">
+                company_address = #{companyAddress},
+            </if>
+            <if test="country != null and country != ''">
+                country = #{country},
+            </if>
+            <if test="registrationDate != null ">
+                registration_date = #{registrationDate},
+            </if>
+            <if test="paidUpCapital != null ">
+                paid_up_capital = #{paidUpCapital},
+            </if>
+        </trim>
+    </update>
+
+    <update id="batchSaveCompanyByNo" parameterType="java.util.List">
+        insert into company
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            no,
+            company_name,
+            company_address,
+            country,
+            registration_date,
+            paid_up_capital,
+        </trim>
+        values
+        <foreach item="item" index="i" collection="list" open="" separator=", " close="">
+            (
+                #{item.no},
+                #{item.companyName},
+                #{item.companyAddress},
+                #{item.country},
+                #{item.registrationDate},
+                #{item.paidUpCapital}
+            )
+        </foreach>
+        on duplicate key update
+            company_name = case when values(company_name) is not null and values(company_name) != ''then values(company_name) else company_name end,
+            company_address = case when values(company_address) is not null and values(company_address) != ''then values(company_address) else company_address end,
+            country = case when values(country) is not null and values(country) != ''then values(country) else country end,
+            registration_date = case when values(registration_date) is not null then values(registration_date) else registration_date end,
+            paid_up_capital = case when values(paid_up_capital) is not null then values(paid_up_capital) else paid_up_capital end
+    </update>
+
+
+
+</mapper>

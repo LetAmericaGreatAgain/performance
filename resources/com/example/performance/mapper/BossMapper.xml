@@ -1,0 +1,687 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.example.performance.mapper.BossMapper">
+    <resultMap type="com.example.performance.domain.Boss" id="BossResult">
+        <id property="idCard" column="id_card" />
+        <result property="name" column="name" />
+        <result property="age" column="age" />
+        <result property="gender" column="gender" />
+        <result property="address" column="address" />
+        <result property="phone" column="phone" />
+        <result property="email" column="email" />
+        <result property="companyNo" column="company_no" />
+    </resultMap>
+
+    <sql id="selectBossVo">
+        select
+        <trim prefix="" suffix="" suffixOverrides=",">
+            boss.id_card,
+            boss.name,
+            boss.age,
+            boss.gender,
+            boss.address,
+            boss.phone,
+            boss.email,
+            boss.company_no,
+        </trim>
+        from boss 
+    </sql>
+
+
+    <select id="selectBossByIdCard" parameterType="com.example.performance.domain.Boss" resultMap="BossResult">
+        <include refid="selectBossVo"/>
+        where boss.id_card = #{idCard}
+    </select>
+
+    <select id="selectBossList" parameterType="com.example.performance.domain.Boss" resultMap="BossResult">
+        <include refid="selectBossVo"/>
+        <where>
+            true
+            <if test="idCard != null and idCard != ''">
+                and boss.id_card = #{idCard}
+            </if>
+            <if test="name != null and name != ''">
+                and boss.name = #{name}
+            </if>
+            <if test="age != null ">
+                and boss.age = #{age}
+            </if>
+            <if test="gender != null and gender != ''">
+                and boss.gender = #{gender}
+            </if>
+            <if test="address != null and address != ''">
+                and boss.address = #{address}
+            </if>
+            <if test="phone != null and phone != ''">
+                and boss.phone = #{phone}
+            </if>
+            <if test="email != null and email != ''">
+                and boss.email = #{email}
+            </if>
+            <if test="companyNo != null and companyNo != ''">
+                and boss.company_no = #{companyNo}
+            </if>
+        </where>
+    </select>
+
+    <select id="bossFixedColumnInQuery" resultMap="BossResult">
+        <include refid="selectBossVo"/>
+        where
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+                <if test="list[0].idCard != null and list[0].idCard != ''">
+                    boss.id_card,
+                </if>
+
+                <if test="list[0].name != null and list[0].name != ''">
+                    boss.name,
+                </if>
+
+                <if test="list[0].age != null ">
+                    boss.age,
+                </if>
+
+                <if test="list[0].gender != null and list[0].gender != ''">
+                    boss.gender,
+                </if>
+
+                <if test="list[0].address != null and list[0].address != ''">
+                    boss.address,
+                </if>
+
+                <if test="list[0].phone != null and list[0].phone != ''">
+                    boss.phone,
+                </if>
+
+                <if test="list[0].email != null and list[0].email != ''">
+                    boss.email,
+                </if>
+
+                <if test="list[0].companyNo != null and list[0].companyNo != ''">
+                    boss.company_no,
+                </if>
+        </trim>
+        in
+        <foreach item="item" index="i" collection="list" open="(" separator=", " close=")">
+            <trim prefix="(" suffix=")" suffixOverrides=",">
+                <if test="list[0].idCard != null and list[0].idCard != ''">
+                    #{item.idCard},
+                </if>
+                <if test="list[0].name != null and list[0].name != ''">
+                    #{item.name},
+                </if>
+                <if test="list[0].age != null ">
+                    #{item.age},
+                </if>
+                <if test="list[0].gender != null and list[0].gender != ''">
+                    #{item.gender},
+                </if>
+                <if test="list[0].address != null and list[0].address != ''">
+                    #{item.address},
+                </if>
+                <if test="list[0].phone != null and list[0].phone != ''">
+                    #{item.phone},
+                </if>
+                <if test="list[0].email != null and list[0].email != ''">
+                    #{item.email},
+                </if>
+                <if test="list[0].companyNo != null and list[0].companyNo != ''">
+                    #{item.companyNo},
+                </if>
+            </trim>
+        </foreach>
+
+    </select>
+
+
+    <select id="bossMultiColumnOrQuery" resultMap="BossResult">
+        <include refid="selectBossVo"/>
+        where
+        <foreach item="item" index="i" collection="list" open="" separator=" or " close="">
+            <trim prefix="(" suffix=")" suffixOverrides=",">
+                <if test="item.idCard != null and item.idCard != ''">
+                    boss.id_card,
+                </if>
+                <if test="item.name != null and item.name != ''">
+                    boss.name,
+                </if>
+                <if test="item.age != null ">
+                    boss.age,
+                </if>
+                <if test="item.gender != null and item.gender != ''">
+                    boss.gender,
+                </if>
+                <if test="item.address != null and item.address != ''">
+                    boss.address,
+                </if>
+                <if test="item.phone != null and item.phone != ''">
+                    boss.phone,
+                </if>
+                <if test="item.email != null and item.email != ''">
+                    boss.email,
+                </if>
+                <if test="item.companyNo != null and item.companyNo != ''">
+                    boss.company_no,
+                </if>
+            </trim>
+            =
+            <trim prefix="(" suffix=")" suffixOverrides=",">
+                <if test="item.idCard != null and item.idCard != ''">
+                    #{item.idCard},
+                </if>
+                <if test="item.name != null and item.name != ''">
+                    #{item.name},
+                </if>
+                <if test="item.age != null ">
+                    #{item.age},
+                </if>
+                <if test="item.gender != null and item.gender != ''">
+                    #{item.gender},
+                </if>
+                <if test="item.address != null and item.address != ''">
+                    #{item.address},
+                </if>
+                <if test="item.phone != null and item.phone != ''">
+                    #{item.phone},
+                </if>
+                <if test="item.email != null and item.email != ''">
+                    #{item.email},
+                </if>
+                <if test="item.companyNo != null and item.companyNo != ''">
+                    #{item.companyNo},
+                </if>
+            </trim>
+        </foreach>
+    </select>
+
+    <select id="bossMultiColumnInQuery" resultMap="BossResult">
+        <include refid="selectBossVo"/>
+        where
+        <foreach item="item" index="i" collection="list" open="" separator=" or " close="">
+            <trim prefix="(" suffix=")" suffixOverrides=",">
+                <if test="item.idCard != null and item.idCard != ''">
+                    boss.id_card,
+                </if>
+                <if test="item.name != null and item.name != ''">
+                    boss.name,
+                </if>
+                <if test="item.age != null ">
+                    boss.age,
+                </if>
+                <if test="item.gender != null and item.gender != ''">
+                    boss.gender,
+                </if>
+                <if test="item.address != null and item.address != ''">
+                    boss.address,
+                </if>
+                <if test="item.phone != null and item.phone != ''">
+                    boss.phone,
+                </if>
+                <if test="item.email != null and item.email != ''">
+                    boss.email,
+                </if>
+                <if test="item.companyNo != null and item.companyNo != ''">
+                    boss.company_no,
+                </if>
+            </trim>
+            in
+            <trim prefix="((" suffix="))" suffixOverrides=",">
+                <if test="item.idCard != null and item.idCard != ''">
+                    #{item.idCard},
+                </if>
+                <if test="item.name != null and item.name != ''">
+                    #{item.name},
+                </if>
+                <if test="item.age != null ">
+                    #{item.age},
+                </if>
+                <if test="item.gender != null and item.gender != ''">
+                    #{item.gender},
+                </if>
+                <if test="item.address != null and item.address != ''">
+                    #{item.address},
+                </if>
+                <if test="item.phone != null and item.phone != ''">
+                    #{item.phone},
+                </if>
+                <if test="item.email != null and item.email != ''">
+                    #{item.email},
+                </if>
+                <if test="item.companyNo != null and item.companyNo != ''">
+                    #{item.companyNo},
+                </if>
+            </trim>
+        </foreach>
+
+    </select>
+
+    <select id="bossMultiColumnUnionQuery" resultMap="BossResult">
+        <foreach item="item" index="i" collection="list" open="" separator=" union " close="">
+            <trim prefix="(" suffix=")" suffixOverrides="">
+                <include refid="selectBossVo"/>
+                where
+                <trim prefix="(" suffix=")" suffixOverrides=",">
+                    <if test="item.idCard != null and item.idCard != ''">
+                        boss.id_card,
+                    </if>
+                    <if test="item.name != null and item.name != ''">
+                        boss.name,
+                    </if>
+                    <if test="item.age != null ">
+                        boss.age,
+                    </if>
+                    <if test="item.gender != null and item.gender != ''">
+                        boss.gender,
+                    </if>
+                    <if test="item.address != null and item.address != ''">
+                        boss.address,
+                    </if>
+                    <if test="item.phone != null and item.phone != ''">
+                        boss.phone,
+                    </if>
+                    <if test="item.email != null and item.email != ''">
+                        boss.email,
+                    </if>
+                    <if test="item.companyNo != null and item.companyNo != ''">
+                        boss.company_no,
+                    </if>
+                </trim>
+                =
+                <trim prefix="(" suffix=")" suffixOverrides=",">
+                    <if test="item.idCard != null and item.idCard != ''">
+                        #{item.idCard},
+                    </if>
+                    <if test="item.name != null and item.name != ''">
+                        #{item.name},
+                    </if>
+                    <if test="item.age != null ">
+                        #{item.age},
+                    </if>
+                    <if test="item.gender != null and item.gender != ''">
+                        #{item.gender},
+                    </if>
+                    <if test="item.address != null and item.address != ''">
+                        #{item.address},
+                    </if>
+                    <if test="item.phone != null and item.phone != ''">
+                        #{item.phone},
+                    </if>
+                    <if test="item.email != null and item.email != ''">
+                        #{item.email},
+                    </if>
+                    <if test="item.companyNo != null and item.companyNo != ''">
+                        #{item.companyNo},
+                    </if>
+                </trim>
+            </trim>
+        </foreach>
+    </select>
+
+    <select id="bossMultiColumnUnionAllQuery" resultMap="BossResult">
+        <foreach item="item" index="i" collection="list" open="(" separator=" union all " close=")">
+            <trim prefix="(" suffix=")" suffixOverrides="">
+                <include refid="selectBossVo"/>
+                where
+                <trim prefix="(" suffix=")" suffixOverrides=",">
+                    <if test="item.idCard != null and item.idCard != ''">
+                        boss.id_card,
+                    </if>
+                    <if test="item.name != null and item.name != ''">
+                        boss.name,
+                    </if>
+                    <if test="item.age != null ">
+                        boss.age,
+                    </if>
+                    <if test="item.gender != null and item.gender != ''">
+                        boss.gender,
+                    </if>
+                    <if test="item.address != null and item.address != ''">
+                        boss.address,
+                    </if>
+                    <if test="item.phone != null and item.phone != ''">
+                        boss.phone,
+                    </if>
+                    <if test="item.email != null and item.email != ''">
+                        boss.email,
+                    </if>
+                    <if test="item.companyNo != null and item.companyNo != ''">
+                        boss.company_no,
+                    </if>
+                </trim>
+                =
+                <trim prefix="(" suffix=")" suffixOverrides=",">
+                    <if test="item.idCard != null and item.idCard != ''">
+                        #{item.idCard},
+                    </if>
+                    <if test="item.name != null and item.name != ''">
+                        #{item.name},
+                    </if>
+                    <if test="item.age != null ">
+                        #{item.age},
+                    </if>
+                    <if test="item.gender != null and item.gender != ''">
+                        #{item.gender},
+                    </if>
+                    <if test="item.address != null and item.address != ''">
+                        #{item.address},
+                    </if>
+                    <if test="item.phone != null and item.phone != ''">
+                        #{item.phone},
+                    </if>
+                    <if test="item.email != null and item.email != ''">
+                        #{item.email},
+                    </if>
+                    <if test="item.companyNo != null and item.companyNo != ''">
+                        #{item.companyNo},
+                    </if>
+                </trim>
+            </trim>
+        </foreach>
+    </select>
+
+    <insert id="insertBoss" parameterType="com.example.performance.domain.Boss">
+        insert into boss
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="idCard != null and idCard != ''">
+                id_card,
+            </if>
+            <if test="name != null and name != ''">
+                name,
+            </if>
+            <if test="age != null ">
+                age,
+            </if>
+            <if test="gender != null and gender != ''">
+                gender,
+            </if>
+            <if test="address != null and address != ''">
+                address,
+            </if>
+            <if test="phone != null and phone != ''">
+                phone,
+            </if>
+            <if test="email != null and email != ''">
+                email,
+            </if>
+            <if test="companyNo != null and companyNo != ''">
+                company_no,
+            </if>
+        </trim>
+        values
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="idCard != null and idCard != ''">
+                #{idCard},
+            </if>
+            <if test="name != null and name != ''">
+                #{name},
+            </if>
+            <if test="age != null ">
+                #{age},
+            </if>
+            <if test="gender != null and gender != ''">
+                #{gender},
+            </if>
+            <if test="address != null and address != ''">
+                #{address},
+            </if>
+            <if test="phone != null and phone != ''">
+                #{phone},
+            </if>
+            <if test="email != null and email != ''">
+                #{email},
+            </if>
+            <if test="companyNo != null and companyNo != ''">
+                #{companyNo},
+            </if>
+        </trim>
+    </insert>
+
+    <insert id="batchInsertBoss" parameterType="java.util.List">
+        insert into boss
+            (id_card, name, age, gender, address, phone, email, company_no)
+        values
+        <foreach collection="list" item="item" index="index" separator=",">
+            (#{item.idCard}, #{item.name}, #{item.age}, #{item.gender}, #{item.address}, #{item.phone}, #{item.email}, #{item.companyNo})
+        </foreach>
+    </insert>
+
+    <update id="updateBoss" parameterType="com.example.performance.domain.Boss">
+        update boss
+        <trim prefix="SET" suffixOverrides=",">
+            <if test="name != null and name != ''">
+                name = #{name},
+            </if>
+            <if test="age != null ">
+                age = #{age},
+            </if>
+            <if test="gender != null and gender != ''">
+                gender = #{gender},
+            </if>
+            <if test="address != null and address != ''">
+                address = #{address},
+            </if>
+            <if test="phone != null and phone != ''">
+                phone = #{phone},
+            </if>
+            <if test="email != null and email != ''">
+                email = #{email},
+            </if>
+            <if test="companyNo != null and companyNo != ''">
+                company_no = #{companyNo},
+            </if>
+        </trim>
+        where id_card = #{idCard}
+    </update>
+
+    <update id="batchUpdateBoss" parameterType="java.util.List">
+        <foreach collection="list" item="item" index="index" open="" close="" separator=";">
+            update boss
+            <trim prefix="SET" suffixOverrides=",">
+                <if test="item.name != null and item.name != ''">
+                    name = #{item.name},
+                </if>
+                <if test="item.age != null ">
+                    age = #{item.age},
+                </if>
+                <if test="item.gender != null and item.gender != ''">
+                    gender = #{item.gender},
+                </if>
+                <if test="item.address != null and item.address != ''">
+                    address = #{item.address},
+                </if>
+                <if test="item.phone != null and item.phone != ''">
+                    phone = #{item.phone},
+                </if>
+                <if test="item.email != null and item.email != ''">
+                    email = #{item.email},
+                </if>
+                <if test="item.companyNo != null and item.companyNo != ''">
+                    company_no = #{item.companyNo},
+                </if>
+            </trim>
+            where id_card = #{item.idCard}
+        </foreach>
+    </update>
+
+    <delete id="deleteBossByIdCard">
+        delete from boss
+        where id_card = #{idCard}
+    </delete>
+
+    <delete id="deleteBoss" parameterType="com.example.performance.domain.Boss">
+        delete from boss
+        <where>
+            true
+            <if test="idCard != null and idCard != ''">
+                and id_card = #{idCard}
+            </if>
+            <if test="name != null and name != ''">
+                and name = #{name}
+            </if>
+            <if test="age != null ">
+                and age = #{age}
+            </if>
+            <if test="gender != null and gender != ''">
+                and gender = #{gender}
+            </if>
+            <if test="address != null and address != ''">
+                and address = #{address}
+            </if>
+            <if test="phone != null and phone != ''">
+                and phone = #{phone}
+            </if>
+            <if test="email != null and email != ''">
+                and email = #{email}
+            </if>
+            <if test="companyNo != null and companyNo != ''">
+                and company_no = #{companyNo}
+            </if>
+        </where>
+
+    </delete>
+
+    <delete id="batchDeleteBoss" parameterType="java.util.List">
+        delete from boss
+        where (id_card) in
+        <foreach item="item" collection="list" open="(" separator=", " close=")">
+            (#{item.idCard})
+        </foreach>
+    </delete>
+
+    <delete id="deleteBossByIdCardArr">
+        delete from boss
+        where
+        <choose>
+            <when test="idCardArr != null and idCardArr.length > 0  and {idCardArr.length}.stream().distinct().count() == 1">
+                (id_card) in
+                <foreach item="idCard" index="i" collection="idCardArr" open="(" separator=", " close=")">
+                    (#{idCardArr[${i}]})
+                </foreach>
+            </when>
+            <otherwise>
+                false
+            </otherwise>
+        </choose>
+
+    </delete>
+
+    <update id="saveBossByIdCard" parameterType="com.example.performance.domain.Boss">
+        insert into boss
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="idCard != null and idCard != ''">
+                id_card,
+            </if>
+            <if test="name != null and name != ''">
+                name,
+            </if>
+            <if test="age != null ">
+                age,
+            </if>
+            <if test="gender != null and gender != ''">
+                gender,
+            </if>
+            <if test="address != null and address != ''">
+                address,
+            </if>
+            <if test="phone != null and phone != ''">
+                phone,
+            </if>
+            <if test="email != null and email != ''">
+                email,
+            </if>
+            <if test="companyNo != null and companyNo != ''">
+                company_no,
+            </if>
+        </trim>
+        values
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="idCard != null and idCard != ''">
+                #{idCard},
+            </if>
+            <if test="name != null and name != ''">
+                #{name},
+            </if>
+            <if test="age != null ">
+                #{age},
+            </if>
+            <if test="gender != null and gender != ''">
+                #{gender},
+            </if>
+            <if test="address != null and address != ''">
+                #{address},
+            </if>
+            <if test="phone != null and phone != ''">
+                #{phone},
+            </if>
+            <if test="email != null and email != ''">
+                #{email},
+            </if>
+            <if test="companyNo != null and companyNo != ''">
+                #{companyNo},
+            </if>
+        </trim>
+        on duplicate key update
+        <trim suffixOverrides=",">
+            <if test="name != null and name != ''">
+                name = #{name},
+            </if>
+            <if test="age != null ">
+                age = #{age},
+            </if>
+            <if test="gender != null and gender != ''">
+                gender = #{gender},
+            </if>
+            <if test="address != null and address != ''">
+                address = #{address},
+            </if>
+            <if test="phone != null and phone != ''">
+                phone = #{phone},
+            </if>
+            <if test="email != null and email != ''">
+                email = #{email},
+            </if>
+            <if test="companyNo != null and companyNo != ''">
+                company_no = #{companyNo},
+            </if>
+        </trim>
+    </update>
+
+    <update id="batchSaveBossByIdCard" parameterType="java.util.List">
+        insert into boss
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            id_card,
+            name,
+            age,
+            gender,
+            address,
+            phone,
+            email,
+            company_no,
+        </trim>
+        values
+        <foreach item="item" index="i" collection="list" open="" separator=", " close="">
+            (
+                #{item.idCard},
+                #{item.name},
+                #{item.age},
+                #{item.gender},
+                #{item.address},
+                #{item.phone},
+                #{item.email},
+                #{item.companyNo}
+            )
+        </foreach>
+        on duplicate key update
+            name = case when values(name) is not null and values(name) != ''then values(name) else name end,
+            age = case when values(age) is not null then values(age) else age end,
+            gender = case when values(gender) is not null and values(gender) != ''then values(gender) else gender end,
+            address = case when values(address) is not null and values(address) != ''then values(address) else address end,
+            phone = case when values(phone) is not null and values(phone) != ''then values(phone) else phone end,
+            email = case when values(email) is not null and values(email) != ''then values(email) else email end,
+            company_no = case when values(company_no) is not null and values(company_no) != ''then values(company_no) else company_no end
+    </update>
+
+
+
+</mapper>
